@@ -26,10 +26,10 @@ export default function LeftSidebar({}: Props) {
 
         <div className='mt-10 px-6'>
           <SignedIn>
-            <SignOutButton>
-              <div>
+            <SignOutButton signOutCallback={()=>router.push('/sign-in')}>
+              <div className='flex cursor-pointer gap-4 p-4'>
               <Image width={24} height={24} src='/logout.svg' alt='logout'/>
-              <p className=''>Logout</p>
+              <p className='text-light-2 max-lg:hidden'>Logout</p>
               </div>
             </SignOutButton>
             </SignedIn>
