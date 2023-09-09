@@ -13,7 +13,7 @@ export default function LeftSidebar({}: Props) {
   const pathname = usePathname();
   return (
     <section className='custom-scrollbar sticky left-0 top-0 z-20 flex h-screen flex-col justify-between overflow-auto w-fit border-r border-r-dark-1 bg-dark-2 pb-5 pt-28 max-md:hidden'>
-      <div className="flex flex-col w-full flex-1 gap-6 px-6">
+      <div className="flex flex-col w-full flex-1 md:gap-4 gap-6 px-6">
           {sideBarLinks.map((element,index)=>{
             const isActive = (pathname.includes(element.route) && pathname.length > 1) || (pathname == element.route);
             return (
@@ -23,17 +23,17 @@ export default function LeftSidebar({}: Props) {
               </Link>
             )
         })}
+        </div>
 
-        <div className='mt-10 px-6'>
+        <div className='relative'>
           <SignedIn>
             <SignOutButton signOutCallback={()=>router.push('/sign-in')}>
-              <div className='flex cursor-pointer gap-4 p-4'>
+              <div className='absolute bottom-0 left-2 flex cursor-pointer gap-4 p-4'>
               <Image width={24} height={24} src='/logout.svg' alt='logout'/>
               <p className='text-light-2 max-lg:hidden'>Logout</p>
               </div>
             </SignOutButton>
             </SignedIn>
-        </div>
 
       </div>
     </section>
