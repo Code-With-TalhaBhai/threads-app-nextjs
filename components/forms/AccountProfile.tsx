@@ -2,23 +2,24 @@
 import React, { ChangeEvent, useState } from 'react'
 import * as z from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
+import {usePathname,useRouter} from 'next/navigation';
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useForm, SubmitHandler } from "react-hook-form"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea"
-import { UserSchema } from '@/lib/validations/user';
+import { UserValidation } from '@/lib/zod-validations/user';
 import Image from 'next/image';
-
-
+import { updateUser } from '@/lib/actions/user.actions';
+import { useUploadThing } from '@/lib/uploadthings';
+import { isBase64Image } from '@/lib/utils';
 
 
 type Props = {
@@ -33,12 +34,25 @@ type Props = {
   btnTitle: string;
 }
 
+type Params = {
+  userId:string,
+  username:string,
+  bio:string,
+  image:string,
+  name:string,
+  path:string
+}
+
 export default function AccountProfile({user,btnTitle}: Props) {
   const [files, setFiles] = useState<File[]>([]);
-  type form_type = z.infer<typeof UserSchema>;
+  const  pathname  = usePathname();
+  const router = useRouter();
+  type form_type = z.infer<typeof UserValidation>;
+
+  const {startUpload} = useUploadThing('imageUploader');
 
   const form = useForm<form_type>({
-    resolver: zodResolver(UserSchema),
+    resolver: zodResolver(UserValidation),
     defaultValues: {
       profile_photo: user?.image || '',
       name: user?.name || '',
@@ -47,8 +61,35 @@ export default function AccountProfile({user,btnTitle}: Props) {
     }
   });
 
-  function submit(data:form_type){
-    console.log(data);
+  async function submit({username,profile_photo,bio,name}:form_type){
+    // Remaining
+    const blob  = profile_photo;
+    const hasImagechanged = isBase64Image(blob);
+
+    if(hasImagechanged){
+      const imgRes = await startUpload(files);
+      
+      if(imgRes && imgRes[0].url){
+        profile_photo = imgRes[0].url;
+      }
+    }
+
+    updateUser({
+      userId:user.id,
+      username,bio,
+      image:profile_photo,
+      name,
+      path:pathname
+    });
+
+    if(pathname == '/profile/edit'){
+      router.back();
+    }
+    else{
+      router.push('/')
+    }
+  
+    console.log(username);;
   }
 
   function handleImage(e:ChangeEvent<HTMLInputElement>,fieldChange:(data:string)=>void){
@@ -62,10 +103,7 @@ export default function AccountProfile({user,btnTitle}: Props) {
       console.log(e.target.files);
       setFiles(Array.from(e.target.files)); // Array.from() make it Array type from fileList Type
       console.log(files);
-      // fileReader.readAsDataURL(img_file);
-      // fileReader.onload = (data)=>{
-        // setFiles(img_file);
-      // }
+
 
       if(!img_file.type.includes('image')) return ;
 
@@ -74,7 +112,6 @@ export default function AccountProfile({user,btnTitle}: Props) {
       fileReader.onload = (data)=>{
         // let url = fileReader.result;
         let url = data.target?.result?.toString();
-
         fieldChange(url as string);
       }
 
@@ -108,12 +145,12 @@ export default function AccountProfile({user,btnTitle}: Props) {
                   />
                 }
               </FormLabel>
-              <FormControl className='flex-1 text-base-semibold text-gray-200'>
+              <FormControl className='cursor-pointer flex-1 text-base-semibold text-gray-200'>
                 <Input 
                   type='file'
                   accept='image/*'
                   placeholder='Upload a photo'
-                  className='cursor-pointer border-none bg-transparent outline-none file:text-blue'
+                  className='border-none bg-transparent outline-none file:cursor-pointer file:text-blue'
                   onChange={(e)=>handleImage(e,field.onChange)}
                 />
               </FormControl>

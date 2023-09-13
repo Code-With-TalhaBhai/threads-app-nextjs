@@ -1,19 +1,21 @@
 import AccountProfile from '@/components/forms/AccountProfile'
+import { fetchUser } from '@/lib/actions/user.actions';
 import { currentUser } from '@clerk/nextjs';
 import React from 'react'
 
 type Props = {}
 
 export default async function OnBoarding({}: Props) {
-  const currUser = await currentUser();
+    const currUser : any  = await currentUser();
 
-  const userInfo = {};
+    const userInfo = await fetchUser(currUser.id);
+
 
   const user = {
     id: currUser?.id,
-    objectId: userInfo?._id,
-    username: currUser?.username || userInfo?.username,
-    name: currUser?.firstName || userInfo?.name,
+    objectId: userInfo?._id.toString(),
+    username: userInfo?.username || currUser?.username,
+    name: userInfo?.name || currUser?.firstName,
     bio: userInfo?.bio || "",
     image: userInfo?.image || currUser?.imageUrl,
   }

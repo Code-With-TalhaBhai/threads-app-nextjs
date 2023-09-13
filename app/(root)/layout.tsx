@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Threads',
-  description: 'Threads clone by Talha Developer',
+  description: 'Threads clone by Talha Developer and its side project',
 }
 
 export default function RootLayout({
