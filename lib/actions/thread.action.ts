@@ -17,7 +17,7 @@ type Params = {
 export async function createThread({text,image,author,communityId,path}:Params){
 
     try {        
-        connectToDb();
+        await connectToDb();
         const createdThread = await Thread.create({
             text,
             community: null,
@@ -41,10 +41,11 @@ export async function createThread({text,image,author,communityId,path}:Params){
 
 
 export async function fetchThreads(pageNumber=1,pageSize=20){
-    connectToDb();
 
+    try{
+        await connectToDb();
+        console.log('connected');
     const skipAmount = (pageNumber - 1) * pageSize;
-
 
     // $in --> matches multiple values given through array
     const threadsQuery = Thread.find({parentId:{$in:[null,undefined]
@@ -54,7 +55,8 @@ export async function fetchThreads(pageNumber=1,pageSize=20){
     .limit(pageSize)
     .populate({
         path: 'author',
-        model: user
+        model: user,
+        select: '_id image name'
     })
     .populate({
         path: 'children',
@@ -65,16 +67,39 @@ export async function fetchThreads(pageNumber=1,pageSize=20){
         }
     });
 
-    const totalDocs = await Thread.countDocuments({
-        parentId: {$in: [null,undefined]}
-    });
+    // const totalDocs = await Thread.countDocuments({
+    //     parentId: {$in: [null,undefined]}
+    // });
+
+    const totalDocs = 60;
     
     // exec() --> This allows the function to be async and run when the data is made available (after the db findOne returns in this instance, or "lazy" loading ...
-    const All_Threads = await threadsQuery.exec();
+    const threads = await threadsQuery.exec(); // all threads
 
-    const isNext = totalDocs > All_Threads.length + skipAmount;
+    const isNext = totalDocs > threads.length + skipAmount;
     // const isNext = totalDocs > threadsQuery.length + skipAmount;
 
     // return {threadsQuery,isNext};
-    return {All_Threads,isNext};
+    return {threads,isNext};
+    }
+    catch(error:any){
+        throw new Error(`Error in fetching threads: ${error.message}`);
+    }
+}
+
+
+export const fetchThreadbyId = async(id:string)=>{
+    await connectToDb();
+    try {
+        const thread = await Thread.findById(id).populate({
+            path: 'author',
+            model: user,
+            select: "_id image name"
+        })
+        ;
+        return thread;
+    } catch (error) {
+        // console.log(error)
+        throw new Error(`Error in fetch by id ${error}`)
+    }
 }

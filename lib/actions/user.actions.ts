@@ -48,12 +48,11 @@ export async function updateUser({userId,username,bio,image,name,path}:Params):P
 export async function fetchUser(userId:string){
     await connectToDb();
 
-    try {
-            return await user.findOne({id:userId});
-    
+    try {      
+            return await user.findOne({id:userId});   
         // .populate()
     } catch (error:any) {
         // console.log(error);
-        throw new Error(`Error in fetching ${error.message}`);
+        throw new Error(`Error in fetching user ${error.message}`);
     }
 }
