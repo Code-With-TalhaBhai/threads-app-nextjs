@@ -48,6 +48,7 @@ export async function fetchThreads(pageNumber=1,pageSize=20){
     const skipAmount = (pageNumber - 1) * pageSize;
 
     // $in --> matches multiple values given through array
+    // Create a query to fetch the posts that have no parent (top-level threads) (a thread that is not a comment/reply).
     const threadsQuery = Thread.find({parentId:{$in:[null,undefined]
     // const threadsQuery = await Thread.find({parentId:{$in:[null,undefined]
     }}).sort({createdAt: 'desc'})
@@ -99,7 +100,44 @@ export const fetchThreadbyId = async(id:string)=>{
         ;
         return thread;
     } catch (error) {
-        // console.log(error)
+        // console.log(error)   
         throw new Error(`Error in fetch by id ${error}`)
+    }
+}
+
+
+export async function addCommentToThread(
+    threadId:string,
+    comment: string,
+    userId: string,
+    path: string
+){
+    try {
+        await connectToDb();
+
+        const originalThread = await Thread.findById(threadId);
+
+        if(!originalThread){
+            throw new Error("Error in fetching main thread");
+        };
+
+
+        // Create a new thread with the comment text
+        const commentThread = new Thread({
+            text: comment,
+            image: null,
+            author: userId,
+            parentId: threadId
+        });
+
+        const savedComment = await commentThread.save();
+        
+        originalThread.children.push(savedComment._id);
+
+        await originalThread.save();
+        revalidatePath(path);
+
+    } catch (error) {
+        throw new Error(`Error in adding comment to thread: ${error}`);
     }
 }

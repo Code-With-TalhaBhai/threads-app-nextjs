@@ -25,7 +25,7 @@ export const sideBarLinks : {imgURL:string,route:string,label:string}[] = [
     label: 'Communities'
 },
 {
-    imgURL: 'user.svg',
+    imgURL: '/user.svg',
     route: '/profile',
     label: 'Profile'
 }

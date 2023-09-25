@@ -5,9 +5,11 @@ import { currentUser } from "@clerk/nextjs"
  
 export default async function Home() {
   
-    const result : any = await fetchThreads(1,30);
+    // const result : any = await fetchThreads(1,30);
+    const result : any = {threads:[]};
     const user = await currentUser();
     
+    // console.log('fetching threads testing ',await fetchThreads(1,30));
     // console.log('author',result.threads[0].author);
     // console.log('author_name',result.threads[0].author.name);
 

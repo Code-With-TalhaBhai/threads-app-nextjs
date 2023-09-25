@@ -1,8 +1,10 @@
 import ThreadCard from "@/components/cards/ThreadCard"
+import Comment from "@/components/forms/Comment";
 import { fetchThreadbyId } from "@/lib/actions/thread.action";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs"
 import { redirect } from "next/navigation";
+
 
 export default async function Page({params}:{params:{id:string}}){
     if(!params.id) return null;
@@ -15,7 +17,8 @@ export default async function Page({params}:{params:{id:string}}){
 
     const thread = await fetchThreadbyId(params.id);
     console.log('complete thread');
-    console.log('author',thread.author);
+    console.log(thread);
+    // console.log('author',thread.author);
 
     return(
         <section className="relative">
@@ -39,7 +42,34 @@ export default async function Page({params}:{params:{id:string}}){
             </div>
 
             <div className="mt-7">
-              {/* <Comment/> */}
+              <Comment
+                threadId={params.id}
+                // threadId={thread._id.toString()}
+                currentUserImage={user.imageUrl}
+                currentUserId={userInfo._id.toString()}
+              />
+            </div>
+
+
+            <div className="mt-10">
+              {
+                thread.children.map((childItem:any)=>(
+                  <ThreadCard
+                      key={childItem.text}
+                      id={childItem._id.toString()}
+                      parentId={childItem.parentId}
+                      content={childItem.text}
+                      author={{ name:childItem.author?.name,
+                        image:childItem.author?.image,
+                        _id:childItem.author?._id.toString()
+                        }} // Because of MongoDb Id bug
+                      community={childItem.community}
+                      createdAt={childItem.createdAt}
+                      currentUserId={user?.id || ''}
+                      isComment={false}
+                    />
+                ))
+              }
             </div>
 
         </section>

@@ -19,12 +19,12 @@ type Props = {
     image: string
   } | null,
   createdAt: string,
-  comments: {
+  comments?: {
     author: {
       image: string
     }
   }[],
-  thread_image: string | null,
+  thread_image?: string,
   isComment: boolean
 }
 
@@ -64,7 +64,8 @@ export default function ThreadCard({id,currentUserId,parentId,content,author,com
 
            {/* photo */}
           <div className='flex flex-col items-center'>
-            <Link href={author.image} className='relative w-11 h-11 border-2 rounded-full'>
+            {/* <Link href={author.image} className='relative w-11 h-11 border-2 rounded-full'> */}
+            <Link href={'author.image'} className='relative w-11 h-11 border-2 rounded-full'>
               <Image className='rounded-full'
               fill
               // src="https://utfs.io/f/64ebebfd-bdad-4a41-8ed7-36f4cde1685b_developer.png"
@@ -122,11 +123,13 @@ export default function ThreadCard({id,currentUserId,parentId,content,author,com
           </div>
       </div>
 
+      {isComment &&
       <div>
         <Link href={`thread/${id}`}>
           <p className='mt-1 text-subtle-medium text-gray-1'>3 replies</p>
         </Link>
       </div>
+      }
       
     </article>
   )

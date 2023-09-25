@@ -49,7 +49,7 @@ export async function fetchUser(userId:string){
     await connectToDb();
 
     try {      
-            return await user.findOne({id:userId});   
+        return await user.findOne({id:userId});   
         // .populate()
     } catch (error:any) {
         // console.log(error);
