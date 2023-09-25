@@ -8,21 +8,22 @@ import user from "../models/user.model"
 type Params = {
     text: string,
     author: string,
-    communityId: string | null,
+    community: string | null,
     path: string,
     image: string | null
 }
 
 
-export async function createThread({text,image,author,communityId,path}:Params){
+export async function createThread({text,image,author,community,path}:Params){
 
     try {        
         await connectToDb();
         const createdThread = await Thread.create({
             text,
-            community: null,
+            community,
             author,
-            image
+            image,
+            parentId: null
         });
 
 
@@ -59,20 +60,20 @@ export async function fetchThreads(pageNumber=1,pageSize=20){
         model: user,
         select: '_id image name'
     })
-    .populate({
-        path: 'children',
-        populate : {
-            path: 'author',
-            model: user,
-            select: '_id name parentId image'
-        }
-    });
-
-    // const totalDocs = await Thread.countDocuments({
-    //     parentId: {$in: [null,undefined]}
+    // .populate({
+    //     path: 'children',
+    //     populate : {
+    //         path: 'author',
+    //         model: user,
+    //         select: '_id name parentId image'
+    //     }
     // });
 
-    const totalDocs = 60;
+    const totalDocs = await Thread.countDocuments({
+        parentId: {$in: [null,undefined]}
+    });
+
+    // const totalDocs = 60;
     
     // exec() --> This allows the function to be async and run when the data is made available (after the db findOne returns in this instance, or "lazy" loading ...
     const threads = await threadsQuery.exec(); // all threads

@@ -1,12 +1,12 @@
 import ThreadCard from "@/components/cards/ThreadCard"
-import { fetchThreads } from "@/lib/actions/thread.action"
+import { fetchThreads } from "@/lib/actions/thread.actions"
 import { currentUser } from "@clerk/nextjs"
 
  
 export default async function Home() {
   
-    // const result : any = await fetchThreads(1,30);
-    const result : any = {threads:[]};
+    const result : any = await fetchThreads(1,30);
+    // const result : any = {threads:[]};
     const user = await currentUser();
     
     // console.log('fetching threads testing ',await fetchThreads(1,30));

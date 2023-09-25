@@ -10,7 +10,7 @@ import { usePathname,useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { useUploadThing } from "@/lib/uploadthings";
 import { useForm } from "react-hook-form";
-import { addCommentToThread } from "@/lib/actions/thread.action";
+import { addCommentToThread } from "@/lib/actions/thread.actions";
 
 
 

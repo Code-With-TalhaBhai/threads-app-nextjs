@@ -8,7 +8,7 @@ import { Button } from '../ui/button';
 import { useRouter,usePathname } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ThreadValidation } from '@/lib/zod-validations/thread';
-import { createThread } from '@/lib/actions/thread.action';
+import { createThread } from '@/lib/actions/thread.actions';
 import Image from 'next/image';
 import { Input } from '../ui/input';
 import { isBase64Image } from '@/lib/utils';
@@ -53,7 +53,7 @@ export default function PostThread({userId}: Props) {
         await createThread(
         {
           text,
-          communityId: null,
+          community: null,
           path:pathname,
           author: accountId,
           image: thread_image

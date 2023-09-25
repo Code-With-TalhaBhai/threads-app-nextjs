@@ -18,7 +18,7 @@ type Props = {
     name: string,
     image: string
   } | null,
-  createdAt: string,
+  createdAt: Date,
   comments?: {
     author: {
       image: string
@@ -32,7 +32,10 @@ type Props = {
 export default function ThreadCard({id,currentUserId,parentId,content,author,community,createdAt,comments,thread_image,isComment}: Props) {
 // export default function ThreadCard({id,currentUserId,parentId,content,community,createdAt,comments,thread_image,isComment}: Props) {
   // console.log('thread props',author);
-  console.log('author props',author.name);
+  // console.log('author props',author.name);
+  console.log('from ThreadCard');
+  console.log();
+  console.log({id,currentUserId,parentId,content,author,community,createdAt,comments,thread_image,isComment})
   return (
     // <article className='flex w-full flex-col rounded-xl bg-dark-2 p-7'>
     //   <div className='flex items-center justify-between'>
