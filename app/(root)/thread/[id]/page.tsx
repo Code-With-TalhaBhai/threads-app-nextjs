@@ -15,24 +15,24 @@ export default async function Page({params}:{params:{id:string}}){
     const userInfo = await fetchUser(user.id);
     if(!userInfo.onboarded) redirect('/on-boarded');
 
-    const thread = await fetchThreadbyId(params.id);
-    console.log('complete thread');
+    const threadQuery = await fetchThreadbyId(params.id);
+    // console.log('complete thread');
+    // To fix serializable data types bug because of (_id,data etc.)
+    const thread = JSON.parse(JSON.stringify(threadQuery));
+    console.log('single thread working');
     console.log(thread);
     // console.log('author',thread.author);
 
     return(
-        <section className="relative">
+        <section className="relative -mt-10">
             <div>
             <ThreadCard
-                      key={thread.text}
-                      id={thread._id.toString()}
+                      key={thread._id}
+                      id={thread._id}
                       thread_image={thread.image}
                       parentId={thread.parentId}
                       content={thread.text}
-                      author={{ name:thread.author.name,
-                        image:thread.author.image,
-                        _id:thread.author._id.toString()
-                        }} // Because of MongoDb Id bug
+                      author={thread.author}
                       community={thread.community}
                       createdAt={thread.createdAt}
                       comments={thread.children}
@@ -41,28 +41,26 @@ export default async function Page({params}:{params:{id:string}}){
                     />
             </div>
 
-            {/* <div className="mt-7">
+            <div className="mt-7">
               <Comment
                 threadId={params.id}
                 // threadId={thread._id.toString()}
                 currentUserImage={user.imageUrl}
                 currentUserId={userInfo._id.toString()}
               />
-            </div> */}
+            </div>
 
 
-            {/* <div className="mt-10">
+            <div className="mt-10">
               {
                 thread.children.map((childItem:any)=>(
                   <ThreadCard
-                      key={childItem.text}
-                      id={childItem._id.toString()}
+                      key={childItem._id}
+                      id={childItem._id}
                       parentId={childItem.parentId}
                       content={childItem.text}
-                      author={{ name:childItem.author?.name,
-                        image:childItem.author?.image,
-                        _id:childItem.author?._id.toString()
-                        }} // Because of MongoDb Id bug
+                      author={childItem.author}
+                      thread_image={childItem.image}
                       community={childItem.community}
                       createdAt={childItem.createdAt}
                       currentUserId={user?.id || ''}
@@ -70,7 +68,7 @@ export default async function Page({params}:{params:{id:string}}){
                     />
                 ))
               }
-            </div> */}
+            </div>
 
         </section>
     )

@@ -3,6 +3,12 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+// type Props = {
+//   thread: thread;
+//   // thread: thread
+// }
+
+// type thread = {
 type Props = {
   id: string,
   currentUserId: string,
@@ -24,18 +30,20 @@ type Props = {
       image: string
     }
   }[],
-  thread_image?: string,
+  thread_image: string | null,
   isComment: boolean
 }
 
 // export default function ThreadCard({id,currentUserId,parentId,content,author,community,createdAt,comments,thread_image,isComment}: Props) {
 export default function ThreadCard({id,currentUserId,parentId,content,author,community,createdAt,comments,thread_image,isComment}: Props) {
+// export default function ThreadCard({thread}: Props) {
+  // const {id,currentUserId,parentId,content,author,community,createdAt,comments,thread_image,isComment} = thread;
 // export default function ThreadCard({id,currentUserId,parentId,content,community,createdAt,comments,thread_image,isComment}: Props) {
   // console.log('thread props',author);
   // console.log('author props',author.name);
   console.log('from ThreadCard');
-  console.log();
-  console.log({id,currentUserId,parentId,content,author,community,createdAt,comments,thread_image,isComment})
+  // console.log(thread);
+  // console.log({id,currentUserId,parentId,content,author,community,createdAt,comments,thread_image,isComment})
   return (
     // <article className='flex w-full flex-col rounded-xl bg-dark-2 p-7'>
     //   <div className='flex items-center justify-between'>
@@ -77,7 +85,10 @@ export default function ThreadCard({id,currentUserId,parentId,content,author,com
               />
             </Link>
 
+            {/* Line below image */}
+            {isComment &&
             <div className='thread-card_bar'/>
+            }
           </div>
 
           {/* name */}

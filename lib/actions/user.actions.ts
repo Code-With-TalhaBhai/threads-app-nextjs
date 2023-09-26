@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from "next/cache";
-import user from "../models/user.model";
+import User from "../models/user.model";
 import { connectToDb } from "../mongoose"
 
 type Params = {
@@ -23,7 +23,7 @@ export async function updateUser({userId,username,bio,image,name,path}:Params):P
     connectToDb();
 
     try{
-    await user.findOneAndUpdate({id:userId},{
+    await User.findOneAndUpdate({id:userId},{
         username: username.toLowerCase(),
         name,
         bio,
@@ -49,7 +49,7 @@ export async function fetchUser(userId:string){
     await connectToDb();
 
     try {      
-        return await user.findOne({id:userId});   
+        return await User.findOne({id:userId});   
         // .populate()
     } catch (error:any) {
         // console.log(error);
