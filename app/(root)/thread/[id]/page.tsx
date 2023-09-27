@@ -37,7 +37,8 @@ export default async function Page({params}:{params:{id:string}}){
                       createdAt={thread.createdAt}
                       comments={thread.children}
                       currentUserId={user?.id || ''}
-                      isComment={thread.children.length > 0 ? true : false}
+                      onCommentPage={true}
+                      isThread={true}
                     />
             </div>
 
@@ -60,11 +61,13 @@ export default async function Page({params}:{params:{id:string}}){
                       parentId={childItem.parentId}
                       content={childItem.text}
                       author={childItem.author}
+                      comments={childItem.children}
                       thread_image={childItem.image}
                       community={childItem.community}
                       createdAt={childItem.createdAt}
                       currentUserId={user?.id || ''}
-                      isComment={false}
+                      onCommentPage={true}
+                      isThread={false}
                     />
                 ))
               }

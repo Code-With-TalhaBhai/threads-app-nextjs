@@ -36,7 +36,9 @@ export default async function Home() {
                       createdAt={thread.createdAt}
                       comments={thread.children}
                       currentUserId={user?.id || ''}
-                      isComment={thread.children.length > 0 ? true : false}
+                      onCommentPage={false}
+                      isThread={true}
+                      // isComment={thread.children.length > 0 ? true : false}
                     />
 
                     // return <ThreadCard thread={thread}/>
