@@ -37,16 +37,8 @@ type Props = {
 
 // export default function ThreadCard({id,currentUserId,parentId,content,author,community,createdAt,comments,thread_image,isComment}: Props) {
 export default function ThreadCard({id,currentUserId,parentId,content,author,community,createdAt,comments,thread_image,isThread,onCommentPage}: Props) {
-// export default function ThreadCard({thread}: Props) {
-  // const {id,currentUserId,parentId,content,author,community,createdAt,comments,thread_image,isComment} = thread;
-// export default function ThreadCard({id,currentUserId,parentId,content,community,createdAt,comments,thread_image,isComment}: Props) {
-  // console.log('thread props',author);
-  // console.log('author props',author.name);
   console.log('from ThreadCard');
-  // console.log(thread);
-  // console.log({id,currentUserId,parentId,content,author,community,createdAt,comments,thread_image,isComment})
-  return (
-
+    return(
     <article className={`mb-6 flex w-full flex-col rounded-xl ${isThread ? 'bg-dark-2 p-7' : 'px-0 xs:px-7'}`}>
       <div className='flex text-small-regular text-light-2'>
 

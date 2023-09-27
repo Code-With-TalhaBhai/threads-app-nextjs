@@ -38,11 +38,7 @@ export default async function Home() {
                       currentUserId={user?.id || ''}
                       onCommentPage={false}
                       isThread={true}
-                      // isComment={thread.children.length > 0 ? true : false}
                     />
-
-                    // return <ThreadCard thread={thread}/>
-                    // return <ThreadCard thread={index}/>
 
                 ))
               }

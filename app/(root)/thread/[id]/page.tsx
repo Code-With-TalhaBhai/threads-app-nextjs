@@ -16,12 +16,9 @@ export default async function Page({params}:{params:{id:string}}){
     if(!userInfo.onboarded) redirect('/on-boarded');
 
     const threadQuery = await fetchThreadbyId(params.id);
-    // console.log('complete thread');
     // To fix serializable data types bug because of (_id,data etc.)
     const thread = JSON.parse(JSON.stringify(threadQuery));
-    console.log('single thread working');
-    console.log(thread);
-    // console.log('author',thread.author);
+    // console.log(thread);
 
     return(
         <section className="relative -mt-10">
