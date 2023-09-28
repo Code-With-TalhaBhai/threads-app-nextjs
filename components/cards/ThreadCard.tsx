@@ -45,7 +45,7 @@ export default function ThreadCard({id,currentUserId,parentId,content,author,com
            {/* photo */}
           <div className='flex flex-col items-center'>
             {/* <Link href={author.image} className='relative w-11 h-11 border-2 rounded-full'> */}
-            <Link href={'author.image'} className='relative w-11 h-11 border-2 rounded-full'>
+            <Link href={`profile/${currentUserId}`} className='relative w-11 h-11 border-2 rounded-full'>
               <Image className='rounded-full'
               fill
               // src="https://utfs.io/f/64ebebfd-bdad-4a41-8ed7-36f4cde1685b_developer.png"
@@ -60,11 +60,11 @@ export default function ThreadCard({id,currentUserId,parentId,content,author,com
             }
           </div>
 
-          {/* name */}
-          <div className={`ml-5 flex flex-col gap-1.5 ${isThread ? '' : 'text-subtle-semibold'}`}>
+
             {/* Username */}
+          <div className={`ml-5 flex flex-col gap-1.5 ${isThread ? '' : 'text-subtle-semibold'}`}>
             <div>
-              <Link href='/profile/post' className=''>
+              <Link href={`profile/${currentUserId}`} className=''>
                   <h4 className={`cursor-pointer ${isThread?'text-heading4-medium':'text-body-bold'}`}>{author.name}</h4>
               </Link>
             </div>
@@ -81,7 +81,7 @@ export default function ThreadCard({id,currentUserId,parentId,content,author,com
               {thread_image && (
               <div className={`my-4 flex w-[105%] ${(isThread && !onCommentPage) ? 'md:w-[90%]': 'md:w-[100%] -ml-4'} h-72`}>
               <Link className='' 
-               href={thread_image!}>
+               href={thread_image}>
                <Image width={1050} height={1050}
               // <Image fill
               // className='rounded-lg border-2 md:border-[1px] border-light-2'
